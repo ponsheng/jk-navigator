@@ -31,7 +31,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
             }
             $(previousSelection).css('background-color', 'inherit');
         }
-        link.css('background-color', '#fcc');
+        link.css('background-color', '#dbdbdb');
         if (focus) { link.focus(); }
         previousSelection = link.get()[0];
         return link;
@@ -148,7 +148,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
 
                 return wrapped;
             };
-            key('j', wrap(function(ev) {
+            key('t', wrap(function(ev) {
                 if (group_selector) {
                     if (localStorage.idx < $(group_selector_all).length-1) {
                         localStorage.idx++;
@@ -175,7 +175,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
 
                 }
             }));
-            key('k', wrap(function(ev) {
+            key('s', wrap(function(ev) {
                 if (group_selector) {
                     if (localStorage.idx > 0) {
                         localStorage.idx--;
