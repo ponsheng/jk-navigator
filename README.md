@@ -29,19 +29,3 @@ Contributing
 At the moment we store a compiled version of the coffeescript files and the handlebars templates. 
 * `coffee --compile *.coffee`
 * `handlebars siteitem.handlebars -m -f siteitem.js`
-
-Site updates
-------------
-
-## Google
-
-    {
-        "selectors": [
-            "div.r>a:nth(*)"
-        ],
-        "allowSubdomains": false,
-        "search_selector": "input[title='Search']",
-        "paginator_selector_next": "a#pnnext.pn",
-        "paginator_selector_prev": "a#pnprev.pn",
-        "liveUpdateElement": "#main"
-    }
