@@ -148,7 +148,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
 
                 return wrapped;
             };
-            key('t', wrap(function(ev) {
+            key('j', wrap(function(ev) {
                 if (group_selector) {
                     if (localStorage.idx < $(group_selector_all).length-1) {
                         localStorage.idx++;
@@ -175,7 +175,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
 
                 }
             }));
-            key('s', wrap(function(ev) {
+            key('k', wrap(function(ev) {
                 if (group_selector) {
                     if (localStorage.idx > 0) {
                         localStorage.idx--;
