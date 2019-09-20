@@ -9,7 +9,7 @@
       opts: {
         selectors: ['div#rso>div.bkWMgd div.g div.rc div.r>a:not(.fl):nth(*)'],
         allowSubdomains: false,
-        search_selector: 'input[title="Search"]',
+        search_selector: 'input.gLFyf.gsfi',
         paginator_selector_next: 'a#pnnext.pn',
         paginator_selector_prev: 'a#pnprev.pn',
         liveUpdateElement: '#main'
