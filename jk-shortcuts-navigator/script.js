@@ -14,9 +14,27 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
     var oldHTML = null;
     var isEnabled = true;
 
+    // Magic numbers
+    var scrollThreshold = 50;
+
 
     function active_selector(idx) {
         return group_selector.replace(':nth(*)', ':nth('+idx+')')
+    }
+
+    function getScrollTop(){
+        var bodyTop = 0;
+            if (typeof window.pageYOffset != "undefined") {
+                bodyTop = window.pageYOffset;
+
+            } else if (typeof document.compatMode != "undefined"
+                         && document.compatMode != "BackCompat") {
+                bodyTop = document.documentElement.scrollTop;
+
+            } else if (typeof document.body != "undefined") {
+                bodyTop = document.body.scrollTop;
+            }
+        return bodyTop;
     }
 
     if (!localStorage.idx)
@@ -33,6 +51,11 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
         }
         link.css('background-color', '#dbdbdb');
         if (focus) { link.focus(); }
+
+        // sometimes the content is hidden by header
+        if (link.offset().top - getScrollTop() < scrollThreshold) {
+            link.get()[0].scrollIntoView({block: "center"});
+        }
         previousSelection = link.get()[0];
         return link;
     };
