@@ -97,6 +97,7 @@ builtInSites = {
       search_selector: '#masthead-search-term',
     }
     regex: 'https?://(www\.)?youtube\.com\/.*'
+    regex: 'https?://(www\.)?youtube\.com\/((?!watch).)*$'
   },
   'stackoverflow|serverfault|superuser|askubuntu|stackexchange': {
     opts: {
