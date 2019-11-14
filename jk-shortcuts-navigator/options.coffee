@@ -142,7 +142,9 @@ class OptionPane extends Backbone.View
 
   addOne: (site) ->
     view = new SiteView({model: site})
-    @$(".customsites").prepend(view.render().el)
+    # Bug when use coffee 2
+    #@$(".customsites").prepend(view.render().el)
+    $(".customsites").prepend(view.render().el)
 
   addAll: ->
     Sites.each(@addOne)
@@ -160,5 +162,4 @@ class OptionPane extends Backbone.View
 
 $(() ->
   options = new OptionPane()
-#  options.initialize()
 )
