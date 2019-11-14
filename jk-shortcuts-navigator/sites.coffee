@@ -96,7 +96,6 @@ builtInSites = {
       selectors: ['div#contents h3 a.yt-simple-endpoint:nth(*)'],
       search_selector: '#masthead-search-term',
     }
-    regex: 'https?://(www\.)?youtube\.com\/.*'
     regex: 'https?://(www\.)?youtube\.com\/((?!watch).)*$'
   },
   'stackoverflow|serverfault|superuser|askubuntu|stackexchange': {
