@@ -94,7 +94,7 @@ builtInSites = {
   'youtube': {
     opts: {
       selectors: ['div#contents h3 a.yt-simple-endpoint:nth(*)'],
-      search_selector: '#masthead-search-term',
+      search_selector: 'input#search.ytd-searchbox',
     }
     regex: 'https?://(www\.)?youtube\.com\/((?!watch).)*$'
   },
