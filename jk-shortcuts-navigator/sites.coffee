@@ -147,9 +147,15 @@ class SiteModel extends Backbone.Model
 class SiteCollection extends Backbone.Collection
   model:SiteModel
   localStorage: new Backbone.LocalStorage("JKSites")
+
+  # Always sync with localStorage, prevent data inconsistence between pages
+  syncLocalStorage: () ->
+    @.fetch()
+
   addDefaults: () ->
+    sites = @
     _.each(builtInSites, (value, key) ->
-      Sites.create({
+      sites.create({
         site: key
         opts: value['opts']
         regex: if value['regex'] then value['regex'] else undefined
@@ -158,7 +164,8 @@ class SiteCollection extends Backbone.Collection
     )
 
   getSiteByUrl: (url) ->
-    sites =  @filter((site) =>
+    @.syncLocalStorage()
+    sites =  @filter((site) ->
       regex = site.get('regex')
       if not regex then return false
       regex = new RegExp(regex, 'i')
@@ -170,8 +177,10 @@ class SiteCollection extends Backbone.Collection
 Sites = new SiteCollection()
 
 $(document).ready(() ->
-  # Add builtin sites to localStorage
   Sites.fetch()
+
+  # FIXME determine between user empty list
+  # Add builtin sites to localStorage at first time
   if Sites.models.length == 0
     Sites.addDefaults()
   
