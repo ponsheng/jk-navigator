@@ -127,6 +127,7 @@ class SiteModel extends Backbone.Model
     json = JSON.stringify @get('opts'), undefined, '    '
 
   submitToJK: () ->
+    console.debug("submitToJK is disabled")
     if @get('onlineId')
       url = "http://http://jknavigator.herokuapp.com/api/v1/site/"+@get('onlineId')+"/"
       method = "PUT"

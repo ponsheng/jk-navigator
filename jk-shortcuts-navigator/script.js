@@ -4,8 +4,13 @@
 chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, function(site_data) {
 
     if (!site_data) { return; }
+
+    console.debug("[JKN] Matched site:",site_data.site);
     chrome.extension.sendMessage({action: 'showPageAction'});
-    if (site_data.enabled === false) { return; }
+    if (site_data.enabled === false) {
+        console.debug("[JKN] Site disabled");
+        return;
+    }
 
     var group_selector_all = null;
     var group_selector = null;
@@ -66,6 +71,7 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
         if (!isEnabled) return;
 
         if (!group_selector) {
+            console.debug("[JKN] Init selector result");
             $(site_opts.selectors).each(function(n, selector) {
                 if (selector instanceof Array) {
                     group_selector_all = selector[0];
@@ -75,16 +81,15 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
                     group_selector = selector;
                 }
                 var result_links_container = $(group_selector_all);
+                console.debug("[JKN]", result_links_container.length, "results");
                 if (result_links_container.length) {
-                    return false; // break
+                    // Get result
+                    return false;
                 } else {
                     group_selector = group_selector_all = null;
                 }
             });
         }
-
-        if (!group_selector)
-            return;
 
         var result_links_container = $(group_selector_all);
         if (result_links_container.length) {
@@ -154,126 +159,124 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
         }
 
         //define what the different keystrokes do
-        if (site_opts)
-        {
-            // Wraps the original function and doesn't execute it if there is a
-            // contenteditable element or if isEnabled is false.
-            var wrap = function(f) {
-                var wrapped = function(ev) {
-                    if ($('*[contenteditable=true]').is(':focus'))
-                        return;
 
-                    if (!isEnabled)
-                        return;
+        // Wraps the original function and doesn't execute it if there is a
+        // contenteditable element or if isEnabled is false.
+        var wrap = function(f) {
+            var wrapped = function(ev) {
+                if ($('*[contenteditable=true]').is(':focus'))
+                    return;
 
-                    return f(ev);
-                };
+                if (!isEnabled)
+                    return;
 
-                return wrapped;
+                return f(ev);
             };
-            key('j', wrap(function(ev) {
-                if (group_selector) {
-                    if (localStorage.idx < $(group_selector_all).length-1) {
-                        localStorage.idx++;
-                        select(true);
-                    }
-                    else {
-                        if (site_opts.paginator_selector_next && $(site_opts.paginator_selector_next).length) {
-                            localStorage.idx = 0;
-                            location.href = $(site_opts.paginator_selector_next).attr('href');
-                            isEnabled = false;
-                        }
-                    }
-                    ev.stopPropagation();
+
+            return wrapped;
+        };
+        key('j', wrap(function(ev) {
+            if (group_selector) {
+                if (localStorage.idx < $(group_selector_all).length-1) {
+                    localStorage.idx++;
+                    select(true);
                 }
                 else {
-                    result_links = JSON.parse(localStorage.result_links);
-                    if (link = result_links[++localStorage.idx]) {
-                        location.href = link;
+                    if (site_opts.paginator_selector_next && $(site_opts.paginator_selector_next).length) {
+                        localStorage.idx = 0;
+                        location.href = $(site_opts.paginator_selector_next).attr('href');
                         isEnabled = false;
                     }
-                    else {
-                       localStorage.idx--;
-                    }
-
                 }
-            }));
-            key('k', wrap(function(ev) {
-                if (group_selector) {
-                    if (localStorage.idx > 0) {
-                        localStorage.idx--;
-                        select(true);
-                    }
-                    else {
-                        if (site_opts.paginator_selector_prev && $(site_opts.paginator_selector_prev).length && $(site_opts.paginator_selector_prev).attr('href') != 'javascript:;') {
-                            localStorage.idx = -1;
-                            location.href = $(site_opts.paginator_selector_prev).attr('href');
-                            isEnabled = false;
-                        }
-
-                    }
-                    ev.stopPropagation();
-                }
-                else {
-                    result_links = JSON.parse(localStorage.result_links);
-                    if (link = result_links[--localStorage.idx]) {
-                        location.href = link;
-                        isEnabled = false;
-                    }
-                    else {
-                        localStorage.idx++;
-                    }
-                }
-            }));
-            key('/', wrap(function(ev) {
-                if (site_opts.search_selector)
-                    $(site_opts.search_selector).focus();
                 ev.stopPropagation();
-                ev.preventDefault();
-            }));
-            function open_link(ev, newWindow, force) {
-                var link = select();
+            }
+            else {
+                result_links = JSON.parse(localStorage.result_links);
+                if (link = result_links[++localStorage.idx]) {
+                    location.href = link;
+                    isEnabled = false;
+                }
+                else {
+                   localStorage.idx--;
+                }
 
-                // If no particular element is focused, open the selected link.
-                // Else, use the browser implementation to open the focused link
-                // which already does the right thing.
-                if (force || ev.target == document.body) {
-                    if (newWindow) {
-                        window.open(link.attr('href'));
-                    } else {
-                        location.href = link.attr('href');
+            }
+        }));
+        key('k', wrap(function(ev) {
+            if (group_selector) {
+                if (localStorage.idx > 0) {
+                    localStorage.idx--;
+                    select(true);
+                }
+                else {
+                    if (site_opts.paginator_selector_prev && $(site_opts.paginator_selector_prev).length && $(site_opts.paginator_selector_prev).attr('href') != 'javascript:;') {
+                        localStorage.idx = -1;
+                        location.href = $(site_opts.paginator_selector_prev).attr('href');
+                        isEnabled = false;
                     }
-                    ev.stopPropagation();
-                    ev.preventDefault();
+
+                }
+                ev.stopPropagation();
+            }
+            else {
+                result_links = JSON.parse(localStorage.result_links);
+                if (link = result_links[--localStorage.idx]) {
+                    location.href = link;
+                    isEnabled = false;
+                }
+                else {
+                    localStorage.idx++;
                 }
             }
+        }));
+        key('/', wrap(function(ev) {
+            if (site_opts.search_selector)
+                $(site_opts.search_selector).focus();
+            ev.stopPropagation();
+            ev.preventDefault();
+        }));
+        function open_link(ev, newWindow, force) {
+            var link = select();
 
-            key('return', wrap(function(ev) {
-                open_link(ev, false);
-            }));
-
-            key('⌘+return', wrap(function(ev) {
-                open_link(ev, true);
-            }));
-
-            key('o', wrap(function(ev) {
-                open_link(ev, false, true);
-            }));
-
-            key('i', wrap(function(ev) {
-                if (group_selector) {
-                    if (localStorage.idx > 0) {
-                        localStorage.idx=0;
-                        select(true);
-                    }
-                    ev.stopPropagation();
+            // If no particular element is focused, open the selected link.
+            // Else, use the browser implementation to open the focused link
+            // which already does the right thing.
+            if (force || ev.target == document.body) {
+                if (newWindow) {
+                    window.open(link.attr('href'));
+                } else {
+                    location.href = link.attr('href');
                 }
-                else {
-                    location.href = localStorage.start_page;
-                    isEnabled = true;
-                }
-            }));
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
         }
+
+        key('return', wrap(function(ev) {
+            open_link(ev, false);
+        }));
+
+        key('⌘+return', wrap(function(ev) {
+            open_link(ev, true);
+        }));
+
+        key('o', wrap(function(ev) {
+            open_link(ev, false, true);
+        }));
+
+        key('i', wrap(function(ev) {
+            if (group_selector) {
+                if (localStorage.idx > 0) {
+                    localStorage.idx=0;
+                    select(true);
+                }
+                ev.stopPropagation();
+            }
+            else {
+                location.href = localStorage.start_page;
+                isEnabled = true;
+            }
+        }));
     });
 
 });
