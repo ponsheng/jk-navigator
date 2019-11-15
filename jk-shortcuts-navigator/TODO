@@ -2,6 +2,10 @@
 
 * check url on every jump
     * ex: youtube/watch
+
 * apply changes immediately
     * With sendMessage api
+        * No msg needed -> optional page
+    * Check why not take effects
 
+* Bootstrap redesign option page
