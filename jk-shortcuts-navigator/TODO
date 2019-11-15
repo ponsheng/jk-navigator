@@ -1,7 +1,7 @@
 # TODO
 
 * check url on every jump
-    * ex: youtube/watch
+    * ex, youtube/watch
 
 * apply changes immediately
     * With sendMessage api
