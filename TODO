@@ -1,4 +1,13 @@
 # TODO
 
+## Fix
+* check url on every jump
+    * ex, youtube/watch
+
+* 0 result failed save
+* Remove console.log
+
+## Upgrade
+* Bootstrap redesign option page
 * Customized keys
 * Better ways to update selector
