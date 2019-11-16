@@ -21,7 +21,8 @@ defaultJSON = '''
 '''
 
 class SiteView extends Backbone.View
-  tagName:'li'
+  #tagName:'li'
+  tagName:'div'
   
   events: {
     'click .title': 'editSite'
@@ -31,12 +32,14 @@ class SiteView extends Backbone.View
   }
 
   initialize: (options) ->
+    console.debug("initialize SiteView")
     @addnew = options.addnew
     if @model
       @model.bind('change', @render, @)
       @model.bind('destroy', @remove, @)
    
   render: () ->
+    console.debug("SiteView render")
     if @addnew
       opts = defaultJSON
     else
@@ -49,7 +52,8 @@ class SiteView extends Backbone.View
     
     if @model
       _.extend(context, @model.toJSON())
-    html = Handlebars.templates.siteitem(context)
+    #html = Handlebars.templates.siteitem(context)
+    html = siteitem2;
     @$el.html(html)
 
     if @addnew
@@ -137,24 +141,30 @@ class OptionPane extends Backbone.View
   initialize: () ->
     Sites.bind('add', this.addOne, @)
     Sites.bind('reset', this.addAll, @)
+    # FIXME not defined ?
     Sites.bind('all', this.render, @)
     Sites.fetch()
 
   addOne: (site) ->
+    console.debug("addOne")
+    
     view = new SiteView({model: site})
     # Bug when use coffee 2
     #@$(".customsites").prepend(view.render().el)
     $(".customsites").prepend(view.render().el)
 
   addAll: ->
+    console.debug("addAll")
     Sites.each(@addOne)
 
   addSite: () ->
+    console.debug("addSite")
     view = new SiteView({addnew:true})
     
     @$(".customsites").prepend(view.render().el)
 
   restoreSites: ->
+    console.debug("restoresites")
     sites = Sites.where({builtin:true})
     for s in sites
       s.destroy()
