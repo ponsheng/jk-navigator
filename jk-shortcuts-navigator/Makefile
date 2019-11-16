@@ -6,6 +6,7 @@ COFFEE=$(addsuffix .coffee, $(NAME))
 JS=$(addsuffix .js, $(NAME))
 
 all:
+	tr -d '\n' < siteitem2.js > siteitem2.nonewline.js
 	coffee --compile *.coffee
 
 clean:
