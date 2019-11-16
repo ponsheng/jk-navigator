@@ -177,7 +177,7 @@ class SiteCollection extends Backbone.Collection
 Sites = new SiteCollection()
 
 $(document).ready(() ->
-  Sites.fetch()
+  Sites.syncLocalStorage()
 
   # FIXME determine between user empty list
   # Add builtin sites to localStorage at first time

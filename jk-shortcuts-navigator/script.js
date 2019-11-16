@@ -91,6 +91,10 @@ chrome.extension.sendMessage({action: 'getOpts', url: document.location.href}, f
             });
         }
 
+        if (!group_selector) {
+            return;
+        }
+
         var result_links_container = $(group_selector_all);
         if (result_links_container.length) {
             //store the links into the local storage
