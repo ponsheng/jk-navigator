@@ -9,4 +9,4 @@ all:
 	coffee --compile *.coffee
 
 clean:
-	rm -f $(JS)
+	rm -f $(JS) siteitem2.nonewline.js
