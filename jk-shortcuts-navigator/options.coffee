@@ -32,14 +32,12 @@ class SiteView extends Backbone.View
   }
 
   initialize: (options) ->
-    console.debug("initialize SiteView")
     @addnew = options.addnew
     if @model
       @model.bind('change', @render, @)
       @model.bind('destroy', @remove, @)
    
   render: () ->
-    console.debug("SiteView render")
     if @addnew
       opts = defaultJSON
     else
@@ -146,7 +144,6 @@ class OptionPane extends Backbone.View
     Sites.fetch()
 
   addOne: (site) ->
-    console.debug("addOne")
     
     view = new SiteView({model: site})
     # Bug when use coffee 2
@@ -154,17 +151,14 @@ class OptionPane extends Backbone.View
     $(".customsites").prepend(view.render().el)
 
   addAll: ->
-    console.debug("addAll")
     Sites.each(@addOne)
 
   addSite: () ->
-    console.debug("addSite")
     view = new SiteView({addnew:true})
     
     @$(".customsites").prepend(view.render().el)
 
   restoreSites: ->
-    console.debug("restoresites")
     sites = Sites.where({builtin:true})
     for s in sites
       s.destroy()
